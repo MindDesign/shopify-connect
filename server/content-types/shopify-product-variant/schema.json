@@ -1,0 +1,100 @@
+{
+  "kind": "collectionType",
+  "collectionName": "shopify_product_variants",
+  "info": {
+    "singularName": "shopify-product-variant",
+    "pluralName": "shopify-product-variants",
+    "displayName": "Product variant"
+  },
+  "options": {
+    "draftAndPublish": false,
+    "comment": ""
+  },
+  "attributes": {
+    "shopify_id": {
+      "type": "biginteger"
+    },
+    "title": {
+      "type": "string"
+    },
+    "sku": {
+      "type": "string"
+    },
+    "fulfillment_service": {
+      "type": "string"
+    },
+    "shopify_created_at": {
+      "type": "datetime"
+    },
+    "shopify_updated_at": {
+      "type": "datetime"
+    },
+    "inventory_management": {
+      "type": "string"
+    },
+    "inventory_policy": {
+      "type": "string"
+    },
+    "position": {
+      "type": "integer"
+    },
+    "price": {
+      "type": "decimal"
+    },
+    "compare_at_price": {
+      "type": "decimal"
+    },
+    "taxable": {
+      "type": "boolean",
+      "default": true
+    },
+    "option1": {
+      "type": "string"
+    },
+    "option2": {
+      "type": "string"
+    },
+    "option3": {
+      "type": "string"
+    },
+    "grams": {
+      "type": "integer"
+    },
+    "weight": {
+      "type": "decimal"
+    },
+    "weight_unit": {
+      "type": "string"
+    },
+    "inventory_item_id": {
+      "type": "biginteger"
+    },
+    "inventory_quantity": {
+      "type": "integer"
+    },
+    "old_inventory_quantity": {
+      "type": "integer"
+    },
+    "admin_graphql_api_id": {
+      "type": "string"
+    },
+    "requires_shipping": {
+      "type": "boolean"
+    },
+    "barcode": {
+      "type": "string"
+    },
+    "product": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::shopify-connect.shopify-product",
+      "inversedBy": "variants"
+    },
+    "image": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::shopify-connect.shopify-product-image",
+      "inversedBy": "variants"
+    }
+  }
+}

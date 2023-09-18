@@ -1,0 +1,58 @@
+
+{
+  "kind": "collectionType",
+  "collectionName": "shopify_product_images",
+  "info": {
+    "singularName": "shopify-product-image",
+    "pluralName": "shopify-product-images",
+    "displayName": "Product image"
+  },
+  "options": {
+    "draftAndPublish": false,
+    "comment": ""
+  },
+  "attributes": {
+    "shopify_id": {
+      "type": "biginteger"
+    },
+    "shopify_product_id": {
+      "type": "biginteger"
+    },
+    "position": {
+      "type": "integer"
+    },
+    "shopify_created_at": {
+      "type": "datetime"
+    },
+    "shopify_updated_at": {
+      "type": "datetime"
+    },
+    "alt": {
+      "type": "string"
+    },
+    "width": {
+      "type": "integer"
+    },
+    "height": {
+      "type": "integer"
+    },
+    "src": {
+      "type": "string"
+    },
+    "admin_graphql_api_id": {
+      "type": "string"
+    },
+    "product": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::shopify-connect.shopify-product",
+      "inversedBy": "images"
+    },
+    "variants": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "plugin::shopify-connect.shopify-product-variant",
+      "mappedBy": "image"
+    }
+  }
+}

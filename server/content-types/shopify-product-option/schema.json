@@ -1,0 +1,34 @@
+
+{
+  "kind": "collectionType",
+  "collectionName": "shopify_product_options",
+  "info": {
+    "singularName": "shopify-product-option",
+    "pluralName": "shopify-product-options",
+    "displayName": "Product option"
+  },
+  "options": {
+    "draftAndPublish": false,
+    "comment": ""
+  },
+  "attributes": {
+    "name": {
+      "type": "string"
+    },
+    "shopify_id": {
+      "type": "biginteger"
+    },
+    "position": {
+      "type": "integer"
+    },
+    "values": {
+      "type": "json"
+    },
+    "product": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::shopify-connect.shopify-product",
+      "inversedBy": "options"
+    }
+  }
+}

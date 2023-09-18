@@ -1,0 +1,15 @@
+
+{
+  "kind": "collectionType",
+  "collectionName": "shopify_product_categories",
+  "info": {
+    "singularName": "shopify-product-category",
+    "pluralName": "shopify-product-categories",
+    "displayName": "Product category"
+  },
+  "options": {
+    "draftAndPublish": false,
+    "comment": ""
+  },
+  "attributes": {}
+}

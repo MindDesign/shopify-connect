@@ -1,0 +1,37 @@
+
+{
+  "kind": "collectionType",
+  "collectionName": "shopify_webhooks",
+  "info": {
+    "singularName": "shopify-webhook",
+    "pluralName": "shopify-webhooks",
+    "displayName": "Webhook"
+  },
+  "options": {
+    "draftAndPublish": false,
+    "comment": ""
+  },
+  "attributes": {
+    "webhook_id": {
+      "type": "string",
+      "private": true
+    },
+    "topic": {
+      "type": "string"
+    },
+    "payload": {
+      "type": "json"
+    },
+    "triggered_at": {
+      "type": "datetime"
+    },
+    "is_test": {
+      "type": "boolean",
+      "default": false
+    },
+    "is_processed": {
+      "type": "boolean",
+      "default": false
+    }
+  }
+}

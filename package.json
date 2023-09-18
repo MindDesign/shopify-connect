@@ -1,0 +1,46 @@
+{
+  "name": "strapi-plugin-shopify-connect",
+  "version": "0.0.3",
+  "description": "Sync products, variants and image data to Strapi.",
+  "strapi": {
+    "name": "shopify-connect",
+    "description": "Sync products, variants and image data to Strapi.",
+    "kind": "plugin",
+    "displayName": "Shopify Connect"
+  },
+  "dependencies": {
+    "@strapi/design-system": "^1.6.3",
+    "@strapi/helper-plugin": "^4.6.0",
+    "@strapi/icons": "^1.6.3",
+    "prop-types": "^15.7.2"
+  },
+  "devDependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^5.3.4",
+    "styled-components": "^5.3.6"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/MindDesign/shopify-connect"
+  },
+  "peerDependencies": {
+    "react": "^17.0.0 || ^18.0.0",
+    "react-dom": "^17.0.0 || ^18.0.0",
+    "react-router-dom": "^5.3.4",
+    "styled-components": "^5.3.6"
+  },
+  "author": {
+    "name": "Tommy Eliassen"
+  },
+  "maintainers": [
+    {
+      "name": "Tommy Elilassen"
+    }
+  ],
+  "engines": {
+    "node": ">=16.0.0 <=20.x.x",
+    "npm": ">=6.0.0"
+  },
+  "license": "MIT"
+}

@@ -1,0 +1,87 @@
+
+{
+  "kind": "collectionType",
+  "collectionName": "shopify_products",
+  "info": {
+    "singularName": "shopify-product",
+    "pluralName": "shopify-products",
+    "displayName": "Product"
+  },
+  "options": {
+    "draftAndPublish": true,
+    "comment": ""
+  },
+  "pluginOptions": {
+    "content-manager": {
+      "visible": true
+    },
+    "content-type-builder": {
+      "visible": true
+    }
+  },
+  "attributes": {
+    "shopify_id": {
+      "type": "biginteger"
+    },
+    "body_html": {
+      "type": "richtext"
+    },
+    "title": {
+      "type": "string"
+    },
+    "handle": {
+      "type": "string"
+    },
+    "product_type": {
+      "type": "string"
+    },
+    "template_suffix": {
+      "type": "string"
+    },
+    "shopify_handle": {
+      "type": "string"
+    },
+    "shopify_published_at": {
+      "type": "datetime"
+    },
+    "shopify_created_at": {
+      "type": "datetime"
+    },
+    "shopify_updated_at": {
+      "type": "datetime"
+    },
+    "vendor": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string"
+    },
+    "admin_graphql_api_id": {
+      "type": "string"
+    },
+    "published_scope": {
+      "type": "string"
+    },
+    "tags": {
+      "type": "text"
+    },
+    "variants": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "plugin::shopify-connect.shopify-product-variant",
+      "mappedBy": "product"
+    },
+    "options": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "plugin::shopify-connect.shopify-product-option",
+      "mappedBy": "product"
+    },
+    "images": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "plugin::shopify-connect.shopify-product-image",
+      "mappedBy": "product"
+    }
+  }
+}

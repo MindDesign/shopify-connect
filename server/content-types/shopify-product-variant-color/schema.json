@@ -1,0 +1,31 @@
+
+{
+  "kind": "collectionType",
+  "collectionName": "shopify_product_variant_colors",
+  "info": {
+    "singularName": "shopify-product-variant-color",
+    "pluralName": "shopify-product-variant-colors",
+    "displayName": "Product variant color"
+  },
+  "options": {
+    "draftAndPublish": false,
+    "comment": ""
+  },
+  "attributes": {
+    "name": {
+      "type": "string"
+    },
+    "rgb_value": {
+      "type": "string"
+    },
+    "hex_value": {
+      "type": "string"
+    },
+    "hsl_value": {
+      "type": "string"
+    },
+    "lch": {
+      "type": "string"
+    }
+  }
+}
