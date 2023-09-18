@@ -36,7 +36,7 @@ module.exports = createCoreService('plugin::shopify-connect.shopify-webhook', {
       }
     })
 
-    console.log(webhooks);
+    //console.log(webhooks);
   },
 
   /**
