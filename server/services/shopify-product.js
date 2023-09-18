@@ -51,6 +51,54 @@ async function checkIfVariantExist(shopify_id) {
 }
 
 /**
+ * Get variant Strapi ids
+ * 
+ * @param {array} shopify_ids 
+ */
+async function getStrapiVariantIdsFromShopifyVariantIds(shopify_ids) {
+  console.log("\n\nShopify ids: ", shopify_ids, "\n\n");
+  const variants = await strapi.entityService.findMany('plugin::shopify-connect.shopify-product-variant', {
+    fields: ['id'],
+    filters: {
+      shopify_id: {
+        $in: shopify_ids,
+      },
+    },
+  });
+console.log("\n\nFound variants: ", JSON.stringify(variants, null, 4), "\n\n");
+  return await variants.map(({ id }) => id)
+}
+
+/**
+ * Parepare image
+ * 
+ * @param {any} image 
+ * @returns 
+ */
+async function prepareImage(image) {
+  image.shopify_id = image.id;
+  image.shopify_product_id = image.product_id;
+  image.shopify_created_at = image.created_at;
+  image.shopify_updated_at = image.updated_at;
+
+  delete image["id"];
+  delete image["product_id"];
+  delete image["created_at"];
+  delete image["updated_at"];
+
+  // Image connected to variants? Get Strapi ids for variants
+  // and swap Shopify variant ids with Strapi variant ids.
+  if (image.variant_ids.length > 0) {
+    console.log("\nImage has variants: ", image.variant_ids, "\n\n");
+    const variant_ids = await getStrapiVariantIdsFromShopifyVariantIds(image.variant_ids);
+    image.variants = await variant_ids;
+    console.log("\nImage with Strapi variant ids: ", JSON.stringify(image, null, 4), "\n\n");
+  }
+
+  return await image;
+}
+
+/**
  * Prepare and split product, options, images and variants
  * 
  * Rename product and variant object keys that has the same name
@@ -58,14 +106,12 @@ async function checkIfVariantExist(shopify_id) {
  * updating or creating products and variants
  * 
  * @param {any} entity 
- * @returns {product, variants, options, images, variant_images}
+ * @returns {product, variants, options, images}
  */
-function prepareProduct(entity) {
+async function prepareProduct(entity) {
   // Destructure relations from entity (variants, options and images) 
   // since Strapi only accepts relation ids. We will add the ids later
   const { variants, options, images } = entity;
-
-  let image_variant_array = [];
 
   // Delete relations from entity
   delete entity["variants"];
@@ -110,37 +156,19 @@ function prepareProduct(entity) {
     })
   }
 
+  let preparedImages = [];
   if (images.length > 0) {
-    images.forEach((image) => {
-      image.shopify_id = image.id;
-      image.shopify_product_id = image.product_id;
-      image.shopify_created_at = image.created_at;
-      image.shopify_updated_at = image.updated_at;
-
-      delete image["id"];
-      delete image["product_id"];
-      delete image["created_at"];
-      delete image["updated_at"];
-
-      // Get variant ids this image is connected to
-      if (image.variant_ids.length > 0) {
-        let variant_shopify_ids = [];
-        image.variant_ids.forEach(variant_id => {
-          variant_shopify_ids.push(variant_id);
-        })
-        image_variant_array.push({ image_id: image.shopify_id, variant_shopify_ids: variant_shopify_ids });
-      }
-
-      delete image["variant_ids"];
-    })
+    await Promise.all(images.map(async (image) => {
+      const preparedImage = await prepareImage(image)
+      preparedImages.push(await preparedImage);
+    }));
   }
 
   return {
     product: entity,
     variants: variants,
     options: options,
-    images: images,
-    variant_images: image_variant_array
+    images: preparedImages
   };
 }
 
@@ -171,29 +199,6 @@ async function createOptions(options) {
 }
 
 /**
- * Get all image ids and what variants are connected to each image id
- * 
- * @param {any} variant_images 
- * @returns 
- */
-async function getVariantIdsForImageVariants(variant_images) {
-  await Promise.all(variant_images.map(async (variant_image) => {
-    const variants = await strapi.entityService.findMany('plugin::shopify-connect.shopify-product-variant', {
-      fields: ['id'],
-      filters: {
-        shopify_id: {
-          $in: variant_image.variant_shopify_ids,
-        },
-      },
-    });
-    const variant_ids = variants.map(({ id }) => id)
-    variant_image.variant_ids = variant_ids
-  }));
-
-  return variant_images;
-}
-
-/**
  * Create multiple images
  * 
  * @param {any} images 
@@ -201,39 +206,9 @@ async function getVariantIdsForImageVariants(variant_images) {
  * @returns Array
  *  returns array of image ids created
  */
-async function createImages(images, variant_images) {
-  const variants_to_connect = await getVariantIdsForImageVariants(variant_images);
-  const images_with_variants = [];
-
-  images.forEach(image => {
-    variants_to_connect.forEach(variant_image => {
-      if (image.shopify_id === variant_image.image_id) {
-        const image_with_variants = {
-          ...image,
-          'variants': { connect: variant_image.variant_ids }
-        }
-        images_with_variants.push(image_with_variants);
-      }
-    })
-  });
-
-  console.log("images_with_variants", JSON.stringify(images_with_variants, null, 4));
-
+async function createImages(images) {
   return await strapi.db.query('plugin::shopify-connect.shopify-product-image').createMany({
-    data: images_with_variants
-  });
-}
-
-/**
- * Create image
- * 
- * @param {any} image
- * @returns Array
- *  returns array of image ids created
- */
-async function createImage(image) {
-  return await strapi.entityService.create('plugin::shopify-connect.shopify-product-image', {
-    data: image
+    data: images
   });
 }
 
@@ -244,13 +219,12 @@ async function createImage(image) {
  * @param array[] variant ids
  * @param array[] option ids 
  * @param array[] image ids 
- * @param array[] image variants
  * @returns Promise<T>any
  */
-async function createProduct(product, variants, options, images, variant_images) {
+async function createProduct(product, variants, options, images) {
   const variant_ids = await createVariants(variants);
   const option_ids = await createOptions(options);
-  const image_ids = await createImages(images, variant_images);
+  const image_ids = await createImages(images);
   const product_with_relations = {
     ...product,
     'variants': { connect: variant_ids.ids },
@@ -301,11 +275,11 @@ module.exports = createCoreService('plugin::shopify-connect.shopify-product', {
   },
 
   async processWebhook(entity) {
-    const { product, variants, options, images, variant_images } = prepareProduct(entity);
+    const { product, variants, options, images } = await prepareProduct(entity);
     const num_products = await checkIfProductExist(product.shopify_id);
 
     if (num_products == 0) {
-      return await createProduct(product, variants, options, images, variant_images);
+      return await createProduct(product, variants, options, images);
     } else if (num_products === 1) {
       // TODO: implement
       return;
