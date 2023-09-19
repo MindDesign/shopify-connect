@@ -223,7 +223,7 @@ async function createImages(images, variant_shopify_ids) {
 
     created_images.push(created_image.id);
   }));
-console.log(created_images);
+
   return created_images;
 }
 
