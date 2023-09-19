@@ -10,9 +10,12 @@ In `Shopify / Settings / Notifications / Webhooks`, add a new webhook for either
 
 - Process webhooks
   - Save new products to Strapi, or update products in Strapi that are sent by Shopify webhooks
-    - In progress, now saving new products ~~, except bug in variant image connection.~~
+    - ~~ saving new products, except bug in variant image connection.~~
+    - update existing products
 - Sync all products from Shopify
   - Fetch all products via Shopify REST api and add to Strapi. Images will not be downloaded, but image urls will be saved.
+    - create new products
+    - update existing products
 - Sync individual products to Shopify
 - Sync all products to Shopify
 
