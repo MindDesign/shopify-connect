@@ -164,7 +164,7 @@ async function createVariants(variants) {
       data: variant
     });
 
-    strapi_shopify_ids_array.push([createdVariant.id, createdVariant.shopify_id]);
+    strapi_shopify_ids_array.push({ strapi_id: createdVariant.id, shopify_id: createdVariant.shopify_id});
   }));
 
   return strapi_shopify_ids_array;
@@ -192,16 +192,34 @@ async function createOptions(options) {
  *  returns array of image ids created
  */
 async function createImages(images, variant_shopify_ids) {
-  let image_ids = [];
+  let combined_images = [];
 
-  await Promise.all(images.forEach(async (image) => {
-    let variant_ids = [];
-    if (image.variant_shopify_ids) {
-      variant_ids.push(variant_shopify_ids.filter((ids) => ids.includes(image.variant_shopify_ids)));
+  await Promise.all(images.map(async (image) => {
+    if (image.variant_ids.length > 0) {
+      let variant_ids = [];
+      image.variant_ids.forEach(id => {
+        variant_shopify_ids.forEach((variant_shopify_id) => {
+          if (variant_shopify_id.shopify_id == id) {
+            variant_ids.push(variant_shopify_id.strapi_id);
+          }
+        });
+      })
+      delete image["variant_ids"];
+      const image_with_variants = {
+        ...image,
+        variants: { connect: variant_ids }
+      }
+      combined_images.push(image_with_variants);
+    } else {
+      combined_images.push(image);
     }
+
+    console.log("\n\ncombined_images: \n", combined_images);
   }));
+
+
   return await strapi.db.query('plugin::shopify-connect.shopify-product-image').createMany({
-    data: images
+    data: combined_images
   });
 }
 
