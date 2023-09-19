@@ -207,14 +207,14 @@ async function createImages(images, variant_shopify_ids) {
       delete image["variant_ids"];
       const image_with_variants = {
         ...image,
-        variants: { connect: variant_ids }
+        'variants': { connect: variant_ids }
       }
       combined_images.push(image_with_variants);
     } else {
       combined_images.push(image);
     }
 
-    console.log("\n\ncombined_images: \n", combined_images);
+    console.log("\n\ncombined_images: \n", JSON.stringify(combined_images, null, 4));
   }));
 
 
@@ -237,8 +237,8 @@ async function createProduct(product, variants, options, images) {
   const variant_shopify_ids = await createVariants(variants);
 
   // Get only strapi variant ids from variant_shopify_ids
-  const variant_ids = variant_shopify_ids.map(ids => ids[0]);
-
+  const variant_ids = variant_shopify_ids.map(ids => ids.strapi_id);
+console.log("\n\n\variant_ids: \n", variant_ids)
   // createOptions returns array of strapi ids
   const option_ids = await createOptions(options);
 
