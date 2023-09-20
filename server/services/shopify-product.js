@@ -88,6 +88,7 @@ async function prepareProduct(entity) {
   delete entity["variants"];
   delete entity["options"];
   delete entity["images"];
+  delete entity["image"];
 
   // Convert Shopify data to Strapi data to preserve Shopify data
   entity.shopify_id = entity.id;
@@ -192,9 +193,11 @@ async function createOptions(options) {
  *  returns array of image ids created
  */
 async function createImages(images, variant_shopify_ids) {
-  let combined_images = [];
+  let created_images = [];
 
   await Promise.all(images.map(async (image) => {
+    let combined_image;
+
     if (image.variant_ids.length > 0) {
       let variant_ids = [];
       image.variant_ids.forEach(id => {
@@ -205,22 +208,23 @@ async function createImages(images, variant_shopify_ids) {
         });
       })
       delete image["variant_ids"];
-      const image_with_variants = {
+      combined_image = {
         ...image,
-        variants: { connect: variant_ids }
-      }
-      combined_images.push(image_with_variants);
+        'variants': { connect: variant_ids }
+      };
     } else {
-      combined_images.push(image);
+      delete image["variant_ids"];
+      combined_image = image;
     }
 
-    console.log("\n\ncombined_images: \n", combined_images);
+    const created_image = await strapi.entityService.create('plugin::shopify-connect.shopify-product-image', {
+      data: combined_image
+    });
+
+    created_images.push(created_image.id);
   }));
 
-
-  return await strapi.db.query('plugin::shopify-connect.shopify-product-image').createMany({
-    data: combined_images
-  });
+  return created_images;
 }
 
 /**
@@ -237,7 +241,7 @@ async function createProduct(product, variants, options, images) {
   const variant_shopify_ids = await createVariants(variants);
 
   // Get only strapi variant ids from variant_shopify_ids
-  const variant_ids = variant_shopify_ids.map(ids => ids[0]);
+  const variant_ids = variant_shopify_ids.map(ids => ids.strapi_id);
 
   // createOptions returns array of strapi ids
   const option_ids = await createOptions(options);
@@ -248,14 +252,14 @@ async function createProduct(product, variants, options, images) {
   // add relation ids to product object
   const product_with_relations = {
     ...product,
-    'variants': { connect: variant_ids.ids },
+    'variants': { connect: variant_ids },
     'options': { connect: option_ids.ids },
-    'images': { connect: image_ids.ids }
+    'images': { connect: image_ids }
   };
 
   const created_product = await strapi.entityService.create('plugin::shopify-connect.shopify-product', {
     data: product_with_relations,
-    populate: ['variants', 'options', 'images'],
+    populate: ['variants', 'options', 'images.variants', 'variants.image'],
   });
 
   return created_product;
