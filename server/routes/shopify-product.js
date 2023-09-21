@@ -5,7 +5,7 @@
  */
 
 module.exports = {
-  type: 'admin',
+  type: 'content-api',
   routes: [
     {
       method: 'POST',
@@ -19,8 +19,7 @@ module.exports = {
       path: '/product/:handle',
       handler: 'shopify-product.findOne',
       config: {
-        policies: [],
-        auth: false
+        policies: []
       }
     }, {
       method: 'GET',

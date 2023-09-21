@@ -293,7 +293,7 @@ module.exports = createCoreService('plugin::shopify-connect.shopify-product', {
     return await strapi.entityService.findMany('plugin::shopify-connect.shopify-product', {
       start: page,
       limit: page_size,
-      populate: ['variants', 'options', 'images', 'images.variants'],
+      populate: ['variants', 'variants.image', 'options', 'images'],
     })
   },
 
