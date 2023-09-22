@@ -4,15 +4,13 @@
  * router
  */
 
-module.exports = {
-  routes: [
-    {
-      method: 'POST',
-      path: '/webhook',
-      handler: 'shopify-webhook.handle',
-      config: {
-        auth: false,
-      },
-    }
-  ],
-};
+module.exports = [
+  {
+    method: 'POST',
+    path: '/webhook',
+    handler: 'shopify-webhook.handle',
+    config: {
+      auth: false,
+    },
+  }
+];
