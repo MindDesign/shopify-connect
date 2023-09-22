@@ -5,16 +5,8 @@
  */
 
 module.exports = {
-  type: 'admin',
   routes: [
     {
-      method: 'POST',
-      path: '/webhook',
-      handler: 'shopify-webhook.handle',
-      config: {
-        auth: false,
-      },
-    }, {
       method: 'POST',
       path: '/webhook/process/all',
       handler: 'shopify-webhook.processAll',
