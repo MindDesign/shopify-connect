@@ -14,21 +14,6 @@ module.exports = [
     }
   }, {
     method: 'GET',
-    path: '/product/:handle',
-    handler: 'shopify-product.findOne',
-    config: {
-      policies: []
-    }
-  }, {
-    method: 'GET',
-    path: '/product',
-    handler: 'shopify-product.findMany',
-    config: {
-      policies: [],
-      auth: false
-    },
-  }, {
-    method: 'GET',
     path: '/product/count',
     handler: 'shopify-product.count',
     config: {

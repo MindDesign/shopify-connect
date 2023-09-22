@@ -281,12 +281,13 @@ module.exports = createCoreService('plugin::shopify-connect.shopify-product', {
   },
 
   async findOne(handle) {
-    const res = await strapi.entityService.findMany('plugin::shopify-connect.shopify-product', {
-      filters: { 'handle': handle },
+    const res = await strapi.db.query('plugin::shopify-connect.shopify-product').findOne({
+      select: '*',
+      where: { handle: handle },
       populate: ['variants', 'options', 'images', 'category', 'category.parent', 'category.categories']
     });
-
-    return res[0];
+console.log(res);
+    return res;
   },
 
   async findMany({ page, page_size }) {

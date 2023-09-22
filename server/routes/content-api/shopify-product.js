@@ -10,16 +10,14 @@ module.exports = [
     path: '/product/:handle',
     handler: 'shopify-product.findOne',
     config: {
-      policies: [],
-      auth: false
+      policies: []
     }
   }, {
     method: 'GET',
     path: '/product',
     handler: 'shopify-product.findMany',
     config: {
-      policies: [],
-      auth: false
+      policies: []
     },
   }
 ];
