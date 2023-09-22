@@ -40,8 +40,8 @@ export default function Sidebar() {
   }];
 
   return <>
-    <SubNav ariaLabel="Shopify Sync sub nav">
-      <SubNavHeader label="Shopify Sync" />
+    <SubNav ariaLabel="Shopify Connect sub nav">
+      <SubNavHeader label="Shopify Connect" />
       <SubNavSections>
         <SubNavSection label="Administration">
           {links.map(link => <SubNavLink to={link.to} active={link.active} key={link.id} icon={link.icon}>
