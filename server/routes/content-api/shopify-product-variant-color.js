@@ -1,9 +1,16 @@
 'use strict';
 
 /**
- *  router
+ * router
  */
 
-const { createCoreRouter } = require('@strapi/strapi').factories;
-
-module.exports = createCoreRouter('plugin::shopify-connect.shopify-product-variant-color');
+module.exports = [
+  {
+    method: 'GET',
+    path: '/color',
+    handler: 'shopify-product-variant-color.findMany',
+    config: {
+      policies: []
+    }
+  }
+];
