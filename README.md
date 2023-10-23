@@ -8,8 +8,6 @@ In `Shopify / Settings / Notifications / Webhooks`, add a new webhook for either
 
 ### Next features to be implemented:
 
-- Routing
-  - Implement API token authentication for `content-api` routes
 - Process webhooks
   - Save new products to Strapi, or update products in Strapi that are sent by Shopify webhooks
     - ~~ saving new products, except bug in variant image connection.~~

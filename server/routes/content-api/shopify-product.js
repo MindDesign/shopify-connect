@@ -10,14 +10,14 @@ module.exports = [
     path: '/product/:handle',
     handler: 'shopify-product.findOne',
     config: {
-      policies: []
+      policies: ['plugin::shopify-connect.checkConfigRoles']
     }
   }, {
     method: 'GET',
     path: '/product',
     handler: 'shopify-product.findMany',
     config: {
-      policies: []
+      policies: ['plugin::shopify-connect.checkConfigRoles']
     },
   }
 ];
