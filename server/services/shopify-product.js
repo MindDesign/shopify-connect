@@ -286,7 +286,6 @@ module.exports = createCoreService('plugin::shopify-connect.shopify-product', {
       where: { handle: handle },
       populate: ['variants', 'options', 'images', 'category', 'category.parent', 'category.categories']
     });
-console.log(res);
     return res;
   },
 
