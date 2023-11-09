@@ -92,7 +92,7 @@ async function prepareProduct(entity) {
 
   // Convert Shopify data to Strapi data to preserve Shopify data
   entity.shopify_id = entity.id;
-  entity.shopify_handle = entity.handle;
+  entity.slug = entity.handle;
   entity.shopify_created_at = entity.created_at;
   entity.shopify_updated_at = entity.updated_at;
   entity.shopify_published_at = entity.published_at;
