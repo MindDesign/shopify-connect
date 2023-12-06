@@ -56,7 +56,7 @@ async function checkIfVariantExist(shopify_id) {
  * @param {array} shopify_ids 
  */
 async function getStrapiVariantIdsFromShopifyVariantIds(shopify_ids) {
-  console.log("\n\nShopify ids: ", shopify_ids, "\n\n");
+  //console.log("\n\nShopify ids: ", shopify_ids, "\n\n");
   const variants = await strapi.entityService.findMany('plugin::shopify-connect.shopify-product-variant', {
     fields: ['id'],
     filters: {
@@ -65,7 +65,7 @@ async function getStrapiVariantIdsFromShopifyVariantIds(shopify_ids) {
       },
     },
   });
-console.log("\n\nFound variants: ", JSON.stringify(variants, null, 4), "\n\n");
+  //console.log("\n\nFound variants: ", JSON.stringify(variants, null, 4), "\n\n");
   return await variants.map(({ id }) => id)
 }
 
@@ -289,10 +289,10 @@ module.exports = createCoreService('plugin::shopify-connect.shopify-product', {
     return res;
   },
 
-  async findMany({ page, page_size }) {
+  async findMany({ page, pageSize }) {
     return await strapi.entityService.findMany('plugin::shopify-connect.shopify-product', {
       start: page,
-      limit: page_size,
+      limit: pageSize,
       populate: ['variants', 'variants.image', 'options', 'images'],
     })
   },
@@ -352,7 +352,7 @@ module.exports = createCoreService('plugin::shopify-connect.shopify-product', {
       const updated_products = [];
 
       await Promise.all(data.products.map(async (entity) => {
-        const { product, variants, options, images } = prepareProduct(entity);
+        const { product, variants, options, images } = await prepareProduct(entity);
         const num_products = await checkIfProductExist(product.shopify_id);
         if (num_products == 0) {
           const created_product = await createProduct(product, variants, options, images);

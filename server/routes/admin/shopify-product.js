@@ -6,6 +6,13 @@
 
 module.exports = [
   {
+    method: 'GET',
+    path: '/product',
+    handler: 'shopify-product.findMany',
+    config: {
+      policies: [],
+    },
+  }, {
     method: 'POST',
     path: '/product/:id',
     handler: 'shopify-product.update',

@@ -11,6 +11,7 @@ import { AnErrorOccurred } from '@strapi/helper-plugin';
 import pluginId from '../../pluginId';
 import HomePage from '../HomePage';
 import WebhookPage from '../WebhookPage';
+import ProductPage from '../ProductPage';
 
 const App = () => {
   return (
@@ -18,6 +19,7 @@ const App = () => {
       <Switch>
         <Route path={`/plugins/${pluginId}`} component={HomePage} exact />
         <Route path={`/plugins/${pluginId}/webhooks`} component={WebhookPage} exact />
+        <Route path={`/plugins/${pluginId}/products`} component={ProductPage} exact />
         <Route component={AnErrorOccurred} />
       </Switch>
     </div>
