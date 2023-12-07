@@ -39,6 +39,8 @@ import {
   IconButton,
   Dots,
   Button,
+  Avatar,
+  AvatarGroup,
   NextLink,
   PageLink,
   Pagination,
@@ -97,6 +99,9 @@ const Products = () => {
 
   const productList = products.map(entry => <Tr key={entry.id}>
     <Td>
+      <Avatar src={`${entry?.variants[0]?.image?.src}`} alt="" preview />
+    </Td>
+    <Td>
       <Typography textColor="neutral800">{entry.id}</Typography>
     </Td>
     <Td>
@@ -115,7 +120,7 @@ const Products = () => {
             })}
           </Link>}
           //primaryAction={<Button startIcon={<Plus />}>Add an entry</Button>}
-          secondaryAction={<Button onClick={syncAllProducts} startIcon={<Cloud />}>Sync all products</Button>}
+          secondaryAction={<Button variant="secondary" onClick={syncAllProducts} startIcon={<Cloud />}>Sync all products</Button>}
           title={formatMessage({
             id: getTrad('Products.BaseHeaderLayout.title'),
             defaultMessage: 'Products'
@@ -130,6 +135,9 @@ const Products = () => {
           <Table colCount={COL_COUNT} rowCount={ROW_COUNT}>
             <Thead>
               <Tr>
+                <Th>
+                  <Typography variant="sigma">Image</Typography>
+                </Th>
                 <Th>
                   <Typography variant="sigma">ID</Typography>
                 </Th>
