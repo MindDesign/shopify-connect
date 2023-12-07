@@ -71,7 +71,7 @@ const Products = () => {
 
   const syncAllProducts = async () => {
     const data = await get(`/${pluginId}/product/shopify-sync`);
-    console.log(data);
+    //console.log(data);
   }
 
   const deleteProduct = async (id) => {
@@ -83,7 +83,7 @@ const Products = () => {
   }
 
   const onConfirm = async () => {
-    console.log("onConfirm");
+    //console.log("onConfirm");
   }
 
   const toggleConfirm = async () => {
@@ -146,23 +146,21 @@ const Products = () => {
           <Pagination activePage={currentPage} pageCount={pageSize}>
             {
               currentPage <= 1
-                ? <PreviousLink to={`/plugins/${pluginId}/products?page=${currentPage}&pageSize=${pageSize}`}>At the first page</PreviousLink>
+                ? <PreviousLink to={`/plugins/${pluginId}/products?page=${Number(currentPage)}&pageSize=${pageSize}`}>At the first page</PreviousLink>
                 : <PreviousLink to={`/plugins/${pluginId}/products?page=${Number(currentPage) - 1}&pageSize=${pageSize}`}>Go to previous page</PreviousLink>
             }
-
             {
-              count > 5
-                ? (<>
-                  <Flex>
-                    <PageLink number={1} to={`/plugins/${pluginId}/products?page=${1}&pageSize=${pageSize}`}>Go to page 1</PageLink>
-                    <Dots />
-                    <PageLink number={numPages} to={`/plugins/${pluginId}/products?page=${1}&pageSize=${pageSize}`}>Go to page `${numPages}`</PageLink>
-                  </Flex>
-                </>)
-                : [...Array(numPages)].map((x, i) => <PageLink number={i + 1} to={`/plugins/${pluginId}/products?page=${i + 1}&pageSize=${pageSize}`}>Go to page ${i + 1}</PageLink>)
+              [...new Array(numPages)].forEach((item) => {
+                currentPage == item
+                  ? <PageLink to={`/plugins/${pluginId}/products?page=${item}&pageSize=${pageSize}`}>{item}</PageLink>
+                  : <PageLink to={`/plugins/${pluginId}/products?page=${item}&pageSize=${pageSize}`}>{item}</PageLink>
+              })
             }
-
-            <NextLink to={`/plugins/${pluginId}/products?page=${Number(numPages)}&pageSize=${pageSize}`}>Go to next page</NextLink>
+            {
+              currentPage === numPages
+                ? <NextLink to={`/plugins/${pluginId}/products?page=${Number(currentPage)}&pageSize=${pageSize}`}>At last page</NextLink>
+                : <NextLink to={`/plugins/${pluginId}/products?page=${Number(currentPage) + 1}&pageSize=${pageSize}`}>Go to next page</NextLink>
+            }
           </Pagination>
 
         </Box>
