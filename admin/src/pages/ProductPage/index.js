@@ -11,11 +11,10 @@ import getTrad from '../../utils/getTrad';
 import pluginId from '../../pluginId';
 import Sidebar from '../../components/Sidebar';
 import ConfirmSyncAllProducts from '../../components/ConfirmSyncAllProducts';
+import CustomPagination from '../../components/CustomPagination';
 
 // Icons
-import Check from '@strapi/icons/Check';
 import ArrowLeft from '@strapi/icons/ArrowLeft';
-import Play from '@strapi/icons/Play';
 import Trash from '@strapi/icons/Trash';
 import Plus from '@strapi/icons/Plus';
 import Cloud from '@strapi/icons/Cloud';
@@ -34,32 +33,21 @@ import {
   Td,
   Th,
   Typography,
-  VisuallyHidden,
-  Flex,
-  IconButton,
-  Dots,
   Button,
   Avatar,
   AvatarGroup,
-  NextLink,
-  PageLink,
-  Pagination,
-  PreviousLink
 } from '@strapi/design-system';
 
 const Products = () => {
   const [products, setProducts] = useState([]);
   const [count, setCount] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
   const [showModal, setShowModal] = useState(false);
   const { formatMessage } = useIntl();
-  const { post, get, del } = getFetchClient();
+  const { get, del } = getFetchClient();
   const ROW_COUNT = 7;
   const COL_COUNT = 10;
-  const urlParams = new URLSearchParams(window.location.search);
-  const pageSize = urlParams.get('pageSize') != undefined ? urlParams.get('pageSize') : 10;
-  const currentPage = urlParams.get('page') != undefined ? urlParams.get('page') : 1;
-  const numPages = Math.round(count / pageSize);
-  const start = (currentPage * pageSize) - pageSize;
 
   const getProductsCount = async () => {
     const data = await get(`/${pluginId}/product/count`);
@@ -67,7 +55,7 @@ const Products = () => {
   }
 
   const getProducts = async () => {
-    const data = await get(`/${pluginId}/product?page=${start}&pageSize=${pageSize}`);
+    const data = await get(`/${pluginId}/product?page=${currentPage}&pageSize=${Number(pageSize)}`);
     setProducts(data.data);
   }
 
@@ -151,26 +139,7 @@ const Products = () => {
             </Tbody>
           </Table>
 
-          <Pagination activePage={currentPage} pageCount={pageSize}>
-            {
-              currentPage <= 1
-                ? <PreviousLink to={`/plugins/${pluginId}/products?page=${Number(currentPage)}&pageSize=${pageSize}`}>At the first page</PreviousLink>
-                : <PreviousLink to={`/plugins/${pluginId}/products?page=${Number(currentPage) - 1}&pageSize=${pageSize}`}>Go to previous page</PreviousLink>
-            }
-            {
-              [...new Array(numPages)].forEach((item) => {
-                currentPage == item
-                  ? <PageLink to={`/plugins/${pluginId}/products?page=${item}&pageSize=${pageSize}`}>{item}</PageLink>
-                  : <PageLink to={`/plugins/${pluginId}/products?page=${item}&pageSize=${pageSize}`}>{item}</PageLink>
-              })
-            }
-            {
-              currentPage === numPages
-                ? <NextLink to={`/plugins/${pluginId}/products?page=${Number(currentPage)}&pageSize=${pageSize}`}>At last page</NextLink>
-                : <NextLink to={`/plugins/${pluginId}/products?page=${Number(currentPage) + 1}&pageSize=${pageSize}`}>Go to next page</NextLink>
-            }
-          </Pagination>
-
+          <CustomPagination numProducts={count} updateCurrentPage={setCurrentPage} updatePageSize={setPageSize} />
         </Box>
 
         <ConfirmSyncAllProducts show={false} toggleConfirm={toggleConfirm} onConfirm={onConfirm} />
