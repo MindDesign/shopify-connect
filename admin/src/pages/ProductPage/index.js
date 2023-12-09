@@ -16,7 +16,7 @@ import CustomPagination from '../../components/CustomPagination';
 // Icons
 import ArrowLeft from '@strapi/icons/ArrowLeft';
 import Trash from '@strapi/icons/Trash';
-import Plus from '@strapi/icons/Plus';
+import Pencil from '@strapi/icons/Pencil';
 import Cloud from '@strapi/icons/Cloud';
 
 // Stuff
@@ -25,6 +25,7 @@ import { Link } from '@strapi/design-system/v2';
 import {
   BaseHeaderLayout,
   Box,
+  Flex,
   Layout,
   Table,
   Thead,
@@ -36,6 +37,8 @@ import {
   Button,
   Avatar,
   AvatarGroup,
+  VisuallyHidden,
+  IconButton
 } from '@strapi/design-system';
 
 const Products = () => {
@@ -87,13 +90,27 @@ const Products = () => {
 
   const productList = products.map(entry => <Tr key={entry.id}>
     <Td>
-      <Avatar src={`${entry?.variants[0]?.image?.src}`} alt="" preview />
-    </Td>
-    <Td>
       <Typography textColor="neutral800">{entry.id}</Typography>
     </Td>
     <Td>
+      <AvatarGroup>
+        {entry?.variants?.filter(
+          (obj, index) => 
+            entry?.variants?.findIndex((item) => item.option1 === obj.option1) === index
+        ).map(element => { return <Avatar src={`${element.image?.src}`} alt="" preview />})}
+      </AvatarGroup>
+    </Td>
+    <Td>
       <Typography textColor="neutral800">{entry.title}</Typography>
+    </Td>
+    <Td>
+      <Typography textColor="neutral800">{entry.path?.path}</Typography>
+    </Td>
+    <Td>
+      <Flex>
+        <IconButton onClick={() => console.log('edit')} label="Edit" noBorder icon={<Pencil />} />
+        <IconButton onClick={() => deleteProduct(entry.id)} label="Delete" noBorder icon={<Trash />} />
+      </Flex>
     </Td>
   </Tr>)
 
@@ -124,13 +141,19 @@ const Products = () => {
             <Thead>
               <Tr>
                 <Th>
-                  <Typography variant="sigma">Image</Typography>
-                </Th>
-                <Th>
                   <Typography variant="sigma">ID</Typography>
                 </Th>
                 <Th>
+                  <Typography variant="sigma">Image</Typography>
+                </Th>
+                <Th>
                   <Typography variant="sigma">Title</Typography>
+                </Th>
+                <Th>
+                  <Typography variant="sigma">Handle</Typography>
+                </Th>
+                <Th>
+                  <VisuallyHidden>Actions</VisuallyHidden>
                 </Th>
               </Tr>
             </Thead>
