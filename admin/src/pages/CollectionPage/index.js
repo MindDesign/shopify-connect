@@ -1,6 +1,6 @@
 /*
  *
- * products
+ * collections
  *
  */
 
@@ -41,8 +41,8 @@ import {
   IconButton
 } from '@strapi/design-system';
 
-const Products = () => {
-  const [products, setProducts] = useState([]);
+const Collections = () => {
+  const [collections, setCollections] = useState([]);
   const [count, setCount] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
@@ -52,27 +52,26 @@ const Products = () => {
   const ROW_COUNT = 7;
   const COL_COUNT = 10;
 
-  const getProductsCount = async () => {
-    const data = await get(`/${pluginId}/product/count`);
+  const getCollectionsCount = async () => {
+    const data = await get(`/${pluginId}/collection/count`);
     setCount(data.data);
   }
 
-  const getProducts = async () => {
-    const data = await get(`/${pluginId}/product?page=${currentPage * pageSize}&pageSize=${Number(pageSize)}`);
-    setProducts(data.data);
+  const getCollections = async () => {
+    const data = await get(`/${pluginId}/collection?page=${currentPage * pageSize}&pageSize=${Number(pageSize)}`);
+    setCollections(data.data);
     console.log(data.data);
   }
 
-  const syncAllProducts = async () => {
-    const data = await get(`/${pluginId}/product/shopify-sync`);
-    //console.log(data);
+  const syncAllCollections = async () => {
+    const data = await get(`/${pluginId}/collection/shopify-sync`);
   }
 
-  const deleteProduct = async (id) => {
-    const res = await del(`/${pluginId}/product/delete/${id}`);
+  const deleteCollection = async (id) => {
+    const res = await del(`/${pluginId}/collection/delete/${id}`);
 
     if (res.status === 200) {
-      getProducts();
+      getCollections();
     }
   }
 
@@ -85,27 +84,19 @@ const Products = () => {
   }
 
   useEffect(() => {
-    getProductsCount();
-    getProducts();
+    getCollectionsCount();
+    getCollections();
   }, [currentPage]);
 
-  const productList = products.map(entry => <Tr key={entry.id}>
+  const collectionList = collections.map(entry => <Tr key={entry.id}>
     <Td>
       <Typography textColor="neutral800">{entry.id}</Typography>
-    </Td>
-    <Td>
-      <AvatarGroup>
-        {entry?.variants?.filter(
-          (obj, index) =>
-            entry?.variants?.findIndex((item) => item.option1 === obj.option1) === index
-        ).map(element => { return <Avatar src={`${element.image?.src}`} alt="" preview /> })}
-      </AvatarGroup>
     </Td>
     <Td>
       <Typography textColor="neutral800">{entry.title}</Typography>
     </Td>
     <Td>
-      <Typography textColor="neutral800">{entry.path?.path}</Typography>
+      <Typography textColor="neutral800">{entry.handle}</Typography>
     </Td>
     <Td>
       <Flex>
@@ -126,14 +117,14 @@ const Products = () => {
             })}
           </Link>}
           //primaryAction={<Button startIcon={<Plus />}>Add an entry</Button>}
-          secondaryAction={<Button variant="secondary" onClick={syncAllProducts} startIcon={<Cloud />}>Sync all products</Button>}
+          secondaryAction={<Button variant="secondary" onClick={syncAllCollections} startIcon={<Cloud />}>Sync all products</Button>}
           title={formatMessage({
             id: getTrad('Products.BaseHeaderLayout.title'),
-            defaultMessage: 'Products'
+            defaultMessage: 'Collections'
           })}
           subtitle={formatMessage({
             id: getTrad('Products.BaseHeaderLayout.subTitle'),
-            defaultMessage: `${count} products found`
+            defaultMessage: `${count} collections found`
           })} as="h2"
         />
 
@@ -143,9 +134,6 @@ const Products = () => {
               <Tr>
                 <Th>
                   <Typography variant="sigma">ID</Typography>
-                </Th>
-                <Th>
-                  <Typography variant="sigma">Image</Typography>
                 </Th>
                 <Th>
                   <Typography variant="sigma">Title</Typography>
@@ -159,7 +147,7 @@ const Products = () => {
               </Tr>
             </Thead>
             <Tbody>
-              {productList}
+              {collectionList}
             </Tbody>
           </Table>
 
@@ -172,4 +160,4 @@ const Products = () => {
   );
 };
 
-export default Products;
+export default Collections;

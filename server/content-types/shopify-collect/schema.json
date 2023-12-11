@@ -1,0 +1,50 @@
+{
+  "kind": "collectionType",
+  "collectionName": "shopify_collects",
+  "info": {
+    "singularName": "shopify-collect",
+    "pluralName": "shopify-collects",
+    "displayName": "Collect"
+  },
+  "options": {
+    "draftAndPublish": false,
+    "comment": ""
+  },
+  "pluginOptions": {
+    "content-manager": {
+      "visible": true
+    },
+    "content-type-builder": {
+      "visible": true
+    }
+  },
+  "attributes": {
+    "shopify_id": {
+      "type": "biginteger"
+    },
+    "shopify_collection_id": {
+      "type": "biginteger"
+    },
+    "shopify_product_id": {
+      "type": "biginteger"
+    },
+    "shopify_created_at": {
+      "type": "datetime"
+    },
+    "shopify_updated_at": {
+      "type": "datetime"
+    },
+    "collection_id": {
+      "type": "biginteger"
+    },
+    "product_id": {
+      "type": "biginteger"
+    },
+    "position": {
+      "type": "integer"
+    },
+    "sort_value": {
+      "type": "string"
+    }
+  }
+}

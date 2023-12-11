@@ -2,8 +2,9 @@
 
 const shopifyWebhook = require('./shopify-webhook');
 const shopifyProduct = require('./shopify-product');
+const shopifyCollection = require('./shopify-collection');
 
 module.exports = {
   type: 'admin',
-  routes: [...shopifyWebhook, ...shopifyProduct],
+  routes: [...shopifyWebhook, ...shopifyProduct, ...shopifyCollection],
 };

@@ -18,6 +18,11 @@ import Cog from '@strapi/icons/Cog';
 
 export default function Sidebar() {
   const links = [{
+    id: 0,
+    label: 'Collections',
+    icon: <Cog />,
+    to: `/plugins/${pluginId}/collections?page=1&pageSize=10`
+  }, {
     id: 1,
     label: 'Products',
     icon: <Cog />,
