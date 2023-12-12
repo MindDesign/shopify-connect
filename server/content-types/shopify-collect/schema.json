@@ -34,11 +34,17 @@
     "shopify_updated_at": {
       "type": "datetime"
     },
-    "collection_id": {
-      "type": "biginteger"
+    "collection": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::shopify-connect.shopify-collection",
+      "inversedBy": "collects"
     },
-    "product_id": {
-      "type": "biginteger"
+    "product": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::shopify-connect.shopify-product",
+      "inversedBy": "collects"
     },
     "position": {
       "type": "integer"
