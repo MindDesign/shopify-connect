@@ -57,12 +57,6 @@
     },
     "template_suffix": {
       "type": "string"
-    },
-    "collects": {
-      "type": "relation",
-      "relation": "oneToMany",
-      "target": "plugin::shopify-connect.shopify-collect",
-      "mappedBy": "collection"
-    },
+    }
   }
 }

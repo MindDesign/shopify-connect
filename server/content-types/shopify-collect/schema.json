@@ -12,20 +12,14 @@
   },
   "pluginOptions": {
     "content-manager": {
-      "visible": true
+      "visible": false
     },
     "content-type-builder": {
-      "visible": true
+      "visible": false
     }
   },
   "attributes": {
     "shopify_id": {
-      "type": "biginteger"
-    },
-    "shopify_collection_id": {
-      "type": "biginteger"
-    },
-    "shopify_product_id": {
       "type": "biginteger"
     },
     "shopify_created_at": {
@@ -37,14 +31,12 @@
     "collection": {
       "type": "relation",
       "relation": "manyToOne",
-      "target": "plugin::shopify-connect.shopify-collection",
-      "inversedBy": "collects"
+      "target": "plugin::shopify-connect.shopify-collection"
     },
     "product": {
       "type": "relation",
       "relation": "manyToOne",
-      "target": "plugin::shopify-connect.shopify-product",
-      "inversedBy": "collects"
+      "target": "plugin::shopify-connect.shopify-product"
     },
     "position": {
       "type": "integer"

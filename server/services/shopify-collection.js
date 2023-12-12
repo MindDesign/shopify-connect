@@ -132,7 +132,7 @@ module.exports = createCoreService('plugin::shopify-connect.shopify-collection',
    */
   async shopifySync() {
     const store_url = `https://${STORE_NAME}.myshopify.com`;
-    const api_endpoint = `/admin/api/${API_VERION}/shopify_collection.json?limit=250`;
+    const api_endpoint = `/admin/api/${API_VERION}/custom_collections.json?limit=250`;
     const res = await fetch(store_url + api_endpoint, {
       headers: {
         'X-Shopify-Access-Token': SECRET_KEY

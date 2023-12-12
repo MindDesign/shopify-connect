@@ -1,4 +1,3 @@
-
 {
   "kind": "collectionType",
   "collectionName": "shopify_products",
@@ -85,12 +84,6 @@
       "type": "relation",
       "relation": "oneToMany",
       "target": "plugin::shopify-connect.shopify-product-image",
-      "mappedBy": "product"
-    },
-    "collects": {
-      "type": "relation",
-      "relation": "oneToMany",
-      "target": "plugin::shopify-connect.shopify-collect",
       "mappedBy": "product"
     }
   }

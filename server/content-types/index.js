@@ -6,6 +6,7 @@ const shopify_product_option = require("./shopify-product-option/schema");
 const shopify_product_image = require("./shopify-product-image/schema");
 const shopify_product_variant_color = require("./shopify-product-variant-color/schema");
 const shopify_collection = require("./shopify-collection/schema");
+const shopify_collect = require("./shopify-collect/schema");
 const shopify_webhook = require("./shopify-webhook/schema");
 
 module.exports = {
@@ -15,5 +16,6 @@ module.exports = {
     'shopify-product-image': { schema: shopify_product_image },
     'shopify-product-variant-color': { schema: shopify_product_variant_color },
     'shopify-collection': { schema: shopify_collection },
+    'shopify-collect': { schema: shopify_collect },
     'shopify-webhook': { schema: shopify_webhook }
 };
