@@ -44,6 +44,7 @@ import {
 const Collections = () => {
   const [collections, setCollections] = useState([]);
   const [count, setCount] = useState(0);
+  const [shopifyCount, setShopifyCount] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [showModal, setShowModal] = useState(false);
@@ -57,6 +58,11 @@ const Collections = () => {
     setCount(data.data);
   }
 
+  const getShopifyCollectionsCount = async () => {
+    const data = await get(`/${pluginId}/collection/shopify-count`);
+    setShopifyCount(data.data);
+  }
+
   const getCollections = async () => {
     const data = await get(`/${pluginId}/collection?page=${currentPage * pageSize}&pageSize=${Number(pageSize)}`);
     setCollections(data.data);
@@ -64,7 +70,8 @@ const Collections = () => {
   }
 
   const syncAllCollections = async () => {
-    const data = await get(`/${pluginId}/collection/shopify-sync`);
+    const data = await get(`/${pluginId}/collection/sync`);
+    console.log(data);
   }
 
   const deleteCollection = async (id) => {
@@ -85,6 +92,7 @@ const Collections = () => {
 
   useEffect(() => {
     getCollectionsCount();
+    getShopifyCollectionsCount();
     getCollections();
   }, [currentPage]);
 
@@ -117,14 +125,14 @@ const Collections = () => {
             })}
           </Link>}
           //primaryAction={<Button startIcon={<Plus />}>Add an entry</Button>}
-          secondaryAction={<Button variant="secondary" onClick={syncAllCollections} startIcon={<Cloud />}>Sync all products</Button>}
+          secondaryAction={<Button variant="secondary" onClick={syncAllCollections} startIcon={<Cloud />}>Sync all collections</Button>}
           title={formatMessage({
             id: getTrad('Products.BaseHeaderLayout.title'),
             defaultMessage: 'Collections'
           })}
           subtitle={formatMessage({
             id: getTrad('Products.BaseHeaderLayout.subTitle'),
-            defaultMessage: `${count} collections found`
+            defaultMessage: `${count} / ${shopifyCount} collections found`
           })} as="h2"
         />
 

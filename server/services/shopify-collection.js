@@ -49,6 +49,7 @@ async function prepareCollection(entity) {
   entity.shopify_updated_at = entity.updated_at;
   entity.shopify_published_at = entity.published_at;
   entity.publishedAt = entity.published_at;
+  entity.collection_type = (entity.hasOwnProperty('rules') && Array.isArray(entity.rules)) ? 'smart' : 'custom';
 
   delete entity["id"];
   delete entity["updated_at"];
@@ -109,18 +110,34 @@ module.exports = createCoreService('plugin::shopify-connect.shopify-collection',
    */
   async shopifyCollectionCount() {
     const store_url = `https://${STORE_NAME}.myshopify.com`;
-    const api_endpoint = `/admin/api/${API_VERION}/shopify_collection/count.json`;
-    const res = await fetch(store_url + api_endpoint, {
+    const custom_api_endpoint = `/admin/api/${API_VERION}/custom_collections/count.json`;
+    const smart_api_endpoint = `/admin/api/${API_VERION}/smart_collections/count.json`;
+    const custom_res = await fetch(store_url + custom_api_endpoint, {
+      headers: {
+        'X-Shopify-Access-Token': SECRET_KEY
+      }
+    });
+    const smart_res = await fetch(store_url + smart_api_endpoint, {
       headers: {
         'X-Shopify-Access-Token': SECRET_KEY
       }
     });
 
-    if (res.status === 200) {
-      const data = await res.json();
-      return data.count;
+    let total_count = 0;
+
+    if (custom_res.status === 200 && smart_res.status === 200) {
+      const custom_data = await custom_res.json();
+      const smart_data = await smart_res.json();
+
+      total_count = total_count + custom_data.count;
+      total_count = total_count + smart_data.count;
+
+      return total_count;
     }
-    return 0;
+
+    return {
+      'error': true
+    };
   },
 
   /**
@@ -132,19 +149,33 @@ module.exports = createCoreService('plugin::shopify-connect.shopify-collection',
    */
   async shopifySync() {
     const store_url = `https://${STORE_NAME}.myshopify.com`;
-    const api_endpoint = `/admin/api/${API_VERION}/custom_collections.json?limit=250`;
-    const res = await fetch(store_url + api_endpoint, {
+    const custom_api_endpoint = `/admin/api/${API_VERION}/custom_collections.json?limit=250`;
+    const smart_api_endpoint = `/admin/api/${API_VERION}/smart_collections.json?limit=250`;
+    const custom_res = await fetch(store_url + custom_api_endpoint, {
       headers: {
         'X-Shopify-Access-Token': SECRET_KEY
       }
     });
-    if (res.status === 200) {
-      const data = await res.json();
+    const smart_res = await fetch(store_url + smart_api_endpoint, {
+      headers: {
+        'X-Shopify-Access-Token': SECRET_KEY
+      }
+    });
+
+
+    if (custom_res.status === 200 && smart_res.status === 200) {
+      const custom_data = await custom_res.json();
+      const smart_data = await smart_res.json();
+      const all_collections = await custom_data.custom_collections.concat(smart_data.smart_collections);
       const created_collections = [];
       const updated_collections = [];
 
-      await Promise.all(data.collections.map(async (entity) => {
+      await Promise.all(all_collections.map(async (entity) => {
         const collection = await prepareCollection(entity);
+
+        console.log(collection);
+
+        /*
         const num_collections = await checkIfCollectionExist(collection.shopify_id);
         if (num_collections == 0) {
           const created_collection = await createCollection(entity);
@@ -161,6 +192,7 @@ module.exports = createCoreService('plugin::shopify-connect.shopify-collection',
           // 2. check options - same as variants
           // 3. check images - same as variants
         }
+        */
       }));
 
       return {

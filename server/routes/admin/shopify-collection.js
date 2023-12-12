@@ -35,14 +35,14 @@ module.exports = [
     }
   }, {
     method: 'GET',
-    path: '/collection/shopify-collection-count',
+    path: '/collection/shopify-count',
     handler: 'shopify-collection.shopifyCollectionCount',
     config: {
       policies: []
     }
   }, {
     method: 'GET',
-    path: '/collection/shopify-sync',
+    path: '/collection/sync',
     handler: 'shopify-collection.shopifySync',
     config: {
       policies: []

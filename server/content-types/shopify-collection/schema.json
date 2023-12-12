@@ -19,9 +19,6 @@
     }
   },
   "attributes": {
-    "shopify_id": {
-      "type": "biginteger"
-    },
     "title": {
       "type": "string"
     },
@@ -40,15 +37,6 @@
     "products_count": {
       "type": "integer"
     },
-    "shopify_handle": {
-      "type": "string"
-    },
-    "shopify_published_at": {
-      "type": "datetime"
-    },
-    "shopify_updated_at": {
-      "type": "datetime"
-    },
     "published_scope": {
       "type": "string"
     },
@@ -57,6 +45,27 @@
     },
     "template_suffix": {
       "type": "string"
+    },
+    "disjunctive": {
+      "type": "boolean"
+    },
+    "rules": {
+      "type": "json"
+    },
+    "admin_graphql_api_id": {
+      "type": "string"
+    },
+    "shopify_id": {
+      "type": "biginteger"
+    },
+    "shopify_handle": {
+      "type": "string"
+    },
+    "shopify_published_at": {
+      "type": "datetime"
+    },
+    "shopify_updated_at": {
+      "type": "datetime"
     }
   }
 }
