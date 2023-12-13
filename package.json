@@ -1,6 +1,6 @@
 {
   "name": "strapi-plugin-shopify-connect",
-  "version": "0.0.14",
+  "version": "0.0.15",
   "description": "Sync products, variants and image data to Strapi.",
   "strapi": {
     "name": "shopify-connect",
