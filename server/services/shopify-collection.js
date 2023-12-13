@@ -103,9 +103,8 @@ module.exports = createCoreService('plugin::shopify-connect.shopify-collection',
   },
 
   /**
-   * Get count for specified collection type
+   * Get count for both custom and smart collection type added together
    * 
-   * @param {*} collection_type 
    * @returns 
    */
   async shopifyCollectionCount() {
@@ -172,27 +171,14 @@ module.exports = createCoreService('plugin::shopify-connect.shopify-collection',
 
       await Promise.all(all_collections.map(async (entity) => {
         const collection = await prepareCollection(entity);
-
-        console.log(collection);
-
-        /*
         const num_collections = await checkIfCollectionExist(collection.shopify_id);
+        
         if (num_collections == 0) {
           const created_collection = await createCollection(entity);
           created_collections.push(created_collection.title)
         } else if (num_collections === 1) {
           updated_collections.push(collection.title);
-          // TODO: UPDATE PRODUCT
-          // 1. check variants
-          // 1.1 check if there are new variants
-          // 1.1.1 create new variants if there are new
-          // 1.2 check if there are deleted variants
-          // 1.2.1 delete variants if there are deleted variants
-          // 1.3 update existing variants
-          // 2. check options - same as variants
-          // 3. check images - same as variants
         }
-        */
       }));
 
       return {
