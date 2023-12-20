@@ -66,7 +66,6 @@ const Collections = () => {
   const getCollections = async () => {
     const data = await get(`/${pluginId}/collection?page=${currentPage * pageSize}&pageSize=${Number(pageSize)}`);
     setCollections(data.data);
-    console.log(data.data);
   }
 
   const syncAllCollections = async () => {

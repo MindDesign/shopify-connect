@@ -44,6 +44,9 @@
     "shopify_handle": {
       "type": "string"
     },
+    "shopify_tags": {
+      "type": "text"
+    },
     "shopify_published_at": {
       "type": "datetime"
     },

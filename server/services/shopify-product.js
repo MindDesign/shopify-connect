@@ -93,6 +93,7 @@ async function prepareProduct(entity) {
   // Convert Shopify data to Strapi data to preserve Shopify data
   entity.shopify_id = entity.id;
   entity.slug = entity.handle;
+  entity.shopify_tags = entity.tags;
   entity.shopify_created_at = entity.created_at;
   entity.shopify_updated_at = entity.updated_at;
   entity.shopify_published_at = entity.published_at;
@@ -100,6 +101,7 @@ async function prepareProduct(entity) {
 
   delete entity["id"];
   //delete entity["handle"]; <- We do not delete the original handle, that can be used still.
+  //delete entity["tags"]; <- Lets keep them for now
   delete entity["created_at"];
   delete entity["updated_at"];
   delete entity["published_at"];
