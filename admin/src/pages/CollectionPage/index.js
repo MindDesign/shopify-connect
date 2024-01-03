@@ -43,6 +43,7 @@ import {
 
 const Collections = () => {
   const [collections, setCollections] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [count, setCount] = useState(0);
   const [shopifyCount, setShopifyCount] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
@@ -93,7 +94,7 @@ const Collections = () => {
     getCollectionsCount();
     getShopifyCollectionsCount();
     getCollections();
-  }, [currentPage]);
+  }, []);
 
   const collectionList = collections.map(entry => <Tr key={entry.id}>
     <Td>

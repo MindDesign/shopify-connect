@@ -27,5 +27,5 @@ module.exports = createCoreService('plugin::shopify-connect.shopify-product-vari
   async del(id) {
     return await strapi.entityService.delete('plugin::shopify-connect.product-variant', id)
   },
-
+  
 });
