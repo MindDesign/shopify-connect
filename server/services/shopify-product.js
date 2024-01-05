@@ -2,7 +2,7 @@
 
 /**
  *  service
-*/
+ */
 
 const { createCoreService } = require('@strapi/strapi').factories;
 

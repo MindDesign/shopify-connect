@@ -12,7 +12,7 @@ import pluginId from '../../pluginId';
 import { Dots, NextLink, PageLink, Pagination, PreviousLink } from '@strapi/design-system/v2';
 import { NavLink } from 'react-router-dom';
 
-export default function CustomPagination({ numProducts, updateCurrentPage, updatePageSize }) {
+export default function CustomPagination({ pageUrl, numProducts, updateCurrentPage, updatePageSize }) {
   let urlParams = new URLSearchParams(window.location.search);
   let currentPage = Number(urlParams.get('page'));
   let pageSize = Number(urlParams.get('pageSize'));
@@ -31,11 +31,11 @@ export default function CustomPagination({ numProducts, updateCurrentPage, updat
     {
       (numPages > 1) 
         ? <Pagination activePage={currentPage} pageCount={numPages}>
-            <PreviousLink as={NavLink} to={`/plugins/${pluginId}/products?page=${prevPage}&pageSize=${pageSize}`}>At the first page</PreviousLink>
+            <PreviousLink as={NavLink} to={`/plugins/${pageUrl}?page=${prevPage}&pageSize=${pageSize}`}>At the first page</PreviousLink>
             {
-              [...Array(numPages)].map((e,i) => <PageLink number={++i} href={`/admin/plugins/${pluginId}/products?page=${i}&pageSize=${pageSize}`}>${i}</PageLink>)
+              [...Array(numPages)].map((e,i) => <PageLink number={++i} href={`/admin/plugins/${pageUrl}?page=${i}&pageSize=${pageSize}`}>${i}</PageLink>)
             }
-            <NextLink as={NavLink} to={`/plugins/${pluginId}/products?page=${nextPage}&pageSize=${pageSize}`}>At the last page</NextLink>
+            <NextLink as={NavLink} to={`/plugins/${pageUrl}?page=${nextPage}&pageSize=${pageSize}`}>At the last page</NextLink>
           </Pagination>
         : ''
      }

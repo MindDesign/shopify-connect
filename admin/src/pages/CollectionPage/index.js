@@ -6,6 +6,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
+import { LoadingIndicatorPage } from '@strapi/helper-plugin';
 import getTrad from '../../utils/getTrad';
 // import PropTypes from 'prop-types';
 import pluginId from '../../pluginId';
@@ -44,6 +45,7 @@ import {
 const Collections = () => {
   const [collections, setCollections] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isSyncing, setIsSyncing] = useState(false);
   const [count, setCount] = useState(0);
   const [shopifyCount, setShopifyCount] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
@@ -51,6 +53,7 @@ const Collections = () => {
   const [showModal, setShowModal] = useState(false);
   const { formatMessage } = useIntl();
   const { get, del } = getFetchClient();
+  const pageUrl = `${pluginId}/collections`;
   const ROW_COUNT = 7;
   const COL_COUNT = 10;
 
@@ -67,11 +70,14 @@ const Collections = () => {
   const getCollections = async () => {
     const data = await get(`/${pluginId}/collection?page=${currentPage * pageSize}&pageSize=${Number(pageSize)}`);
     setCollections(data.data);
+    setIsLoading(false);
   }
 
   const syncAllCollections = async () => {
+    setIsSyncing(true);
     const data = await get(`/${pluginId}/collection/sync`);
-    console.log(data);
+    getCollections();
+    setIsSyncing(false);
   }
 
   const deleteCollection = async (id) => {
@@ -94,7 +100,7 @@ const Collections = () => {
     getCollectionsCount();
     getShopifyCollectionsCount();
     getCollections();
-  }, []);
+  }, [currentPage]);
 
   const collectionList = collections.map(entry => <Tr key={entry.id}>
     <Td>
@@ -114,6 +120,8 @@ const Collections = () => {
     </Td>
   </Tr>)
 
+  if (isLoading) return <LoadingIndicatorPage />;
+
   return (
     <Layout sideNav={<Sidebar />}>
       <>
@@ -125,7 +133,7 @@ const Collections = () => {
             })}
           </Link>}
           //primaryAction={<Button startIcon={<Plus />}>Add an entry</Button>}
-          secondaryAction={<Button variant="secondary" onClick={syncAllCollections} startIcon={<Cloud />}>Sync all collections</Button>}
+          secondaryAction={<Button variant="secondary" onClick={syncAllCollections} startIcon={<Cloud />}>{isSyncing ? ("Syncing...") : ("Sync all collections")}</Button>}
           title={formatMessage({
             id: getTrad('Products.BaseHeaderLayout.title'),
             defaultMessage: 'Collections'
@@ -159,7 +167,7 @@ const Collections = () => {
             </Tbody>
           </Table>
 
-          <CustomPagination numProducts={count} updateCurrentPage={setCurrentPage} updatePageSize={setPageSize} />
+          <CustomPagination pageUrl={pageUrl} numProducts={count} updateCurrentPage={setCurrentPage} updatePageSize={setPageSize} />
         </Box>
 
         <ConfirmSyncAllProducts show={false} toggleConfirm={toggleConfirm} onConfirm={onConfirm} />

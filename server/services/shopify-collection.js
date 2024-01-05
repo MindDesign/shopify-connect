@@ -29,7 +29,7 @@ async function checkIfCollectionExist(shopify_id) {
     }
   });
 
-  return await collections.length;
+  return await collections;
 }
 
 /**
@@ -70,6 +70,20 @@ async function createCollection(collection) {
   });
 
   return created_collection;
+}
+
+/**
+ * update collection
+ * 
+ * @param {any} collection 
+ * @returns Promise<T>any
+ */
+async function updateCollection(collection, id) {
+  const updated_collection = await strapi.entityService.update('plugin::shopify-connect.shopify-collection', id, {
+    data: collection
+  });
+
+  return updated_collection;
 }
 
 /**
@@ -171,13 +185,16 @@ module.exports = createCoreService('plugin::shopify-connect.shopify-collection',
 
       await Promise.all(all_collections.map(async (entity) => {
         const collection = await prepareCollection(entity);
-        const num_collections = await checkIfCollectionExist(collection.shopify_id);
+        const collections = await checkIfCollectionExist(collection.shopify_id);
+        const num_collections = collections.length;
         
         if (num_collections == 0) {
           const created_collection = await createCollection(entity);
           created_collections.push(created_collection.title)
         } else if (num_collections === 1) {
-          updated_collections.push(collection.title);
+          const update_collection_id = collections[0].id;
+          const update_collection = await updateCollection(entity, update_collection_id);
+          updated_collections.push(update_collection.title);
         }
       }));
 
