@@ -32,6 +32,32 @@ async function checkIfProductExist(shopify_id) {
   return await products.length;
 }
 
+async function checkMissingOrRemovedVariants(product_shopify_id, shopify_variants) {
+  const products = await strapi.entityService.findMany('plugin::shopify-connect.shopify-product',  {
+    filters: {
+      shopify_id: {
+        $eg: product_shopify_id
+      }
+    }
+  });
+
+  if (products.length === 1) {
+    const existing_variant_ids = products[0].variants.map((variant) => {
+      return variant.shopify_id;
+    });
+  }
+
+  const shopify_variant_ids = shopify_variants.map((variant) => {
+    return variant.shopify_id;
+  });
+
+  shopify_variant_ids.forEach((id) => {
+    // check if id is not in existing variant ids array (missing)
+    // check if existing variant ids not exist in shopify_variant_ids (removed)
+    //
+  })
+}
+
 /**
  * Prepare and split product, options, images and variants
  * 
@@ -323,6 +349,7 @@ module.exports = createCoreService('plugin::shopify-connect.shopify-product', {
           const created_product = await createProduct(product, variants, options, images);
           created_products.push(created_product.title)
         } else if (num_products === 1) {
+          const { remove_variants, add_variants } = checkMissingOrRemovedVariants(product.shopify_id, variants);
           updated_products.push(product.title);
           // TODO: UPDATE PRODUCT
           // 1. check variants
