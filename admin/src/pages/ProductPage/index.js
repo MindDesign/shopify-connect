@@ -6,6 +6,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
+import { LoadingIndicatorPage } from '@strapi/helper-plugin';
 import getTrad from '../../utils/getTrad';
 // import PropTypes from 'prop-types';
 import pluginId from '../../pluginId';
@@ -43,12 +44,15 @@ import {
 
 const Products = () => {
   const [products, setProducts] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isSyncing, setIsSyncing] = useState(false);
   const [count, setCount] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [showModal, setShowModal] = useState(false);
   const { formatMessage } = useIntl();
   const { get, del } = getFetchClient();
+  const pageUrl = `${pluginId}/products`;
   const ROW_COUNT = 7;
   const COL_COUNT = 10;
 
@@ -60,12 +64,13 @@ const Products = () => {
   const getProducts = async () => {
     const data = await get(`/${pluginId}/product?page=${currentPage * pageSize}&pageSize=${Number(pageSize)}`);
     setProducts(data.data);
-    console.log(data.data);
+    setIsLoading(false);
   }
 
   const syncAllProducts = async () => {
+    setIsSyncing(true);
     const data = await get(`/${pluginId}/product/shopify-sync`);
-    //console.log(data);
+    setIsSyncing(false);
   }
 
   const deleteProduct = async (id) => {
@@ -115,6 +120,8 @@ const Products = () => {
     </Td>
   </Tr>)
 
+  if (isLoading) return <LoadingIndicatorPage />;
+
   return (
     <Layout sideNav={<Sidebar />}>
       <>
@@ -126,7 +133,7 @@ const Products = () => {
             })}
           </Link>}
           //primaryAction={<Button startIcon={<Plus />}>Add an entry</Button>}
-          secondaryAction={<Button variant="secondary" onClick={syncAllProducts} startIcon={<Cloud />}>Sync all products</Button>}
+          secondaryAction={<Button variant="secondary" onClick={syncAllProducts} startIcon={<Cloud />}>{isSyncing ? ("Syncing...") : ("Sync all products")}</Button>}
           title={formatMessage({
             id: getTrad('Products.BaseHeaderLayout.title'),
             defaultMessage: 'Products'
@@ -163,7 +170,7 @@ const Products = () => {
             </Tbody>
           </Table>
 
-          <CustomPagination numProducts={count} updateCurrentPage={setCurrentPage} updatePageSize={setPageSize} />
+          <CustomPagination pageUrl={pageUrl} numProducts={count} updateCurrentPage={setCurrentPage} updatePageSize={setPageSize} />
         </Box>
 
         <ConfirmSyncAllProducts show={false} toggleConfirm={toggleConfirm} onConfirm={onConfirm} />
