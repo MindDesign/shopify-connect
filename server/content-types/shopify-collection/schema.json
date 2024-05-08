@@ -66,6 +66,11 @@
     },
     "shopify_updated_at": {
       "type": "datetime"
+    },
+    "collect": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "plugin::shopify-connect.shopify-collect"
     }
   }
 }
